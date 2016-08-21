@@ -26,8 +26,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Compile Include="AddWorkflowDefinition.ps1" />
+    <Compile Include="AddWorkflowSubscription.ps1" />
+    <Compile Include="CreateStructure.ps1" />
     <Compile Include="GetWorkflowDefinition.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -1,6 +1,9 @@
 ﻿param (
+	[Parameter(Mandatory=$true)]
 	[string]$Url,
+	[Parameter(Mandatory=$true)]
 	[string]$WorkflowDefinitionName,
+	[Parameter(Mandatory=$true)]
 	[string]$DefinitionFile,
 	$Cred
 )
@@ -18,6 +21,14 @@ else
 {
 	$xml = New-Object System.Xml.XmlDocument
 	$xml.LoadXml("<?xml version=`"1.0`" encoding=`"utf-8`"?><WorkflowDefinition></WorkflowDefinition>")
+
+	$displayNameElement = $xml.CreateElement("DisplayName")
+	$displayNameElement.InnerText = $workflowDefinition.DisplayName
+	$xml.LastChild.AppendChild($displayNameElement)
+
+	$descriptionElement = $xml.CreateElement("Description")
+	$descriptionElement.InnerText = $workflowDefinition.Description
+	$xml.LastChild.AppendChild($descriptionElement)
 
 	$xamlElement = $xml.CreateElement("Xaml")
 	$xamlElement.InnerXml = $workflowDefinition.Xaml
