@@ -56,6 +56,43 @@ function EnsureWorkflowHistoryList()
 	return $list
 }
 
+function GetIdForList()
+{
+	param (
+		[Parameter(Mandatory=$true)]
+		[string]$ListName
+	)
+
+	$result = ""
+
+	$list = Get-SPOList | Where { $_.Title -eq $ListName }
+
+	if ($list -ne $null)
+	{
+		$result = $list.Id
+	}
+
+	return $result
+}
+
+function PatchXaml()
+{
+	param (
+		[string]$XamlDef,
+		[string]$oldGuid,
+		[string]$Listname
+	)
+
+	$newGuid = GetIdForList($Listname)
+
+	$findString = "`"$oldGuid`""
+	$newString = "`"$newGuid`""
+
+	$result = $XamlDef.Replace($findString, $newString)
+
+	return $result
+}
+
 #------------------------------------------------------------------------------
 #
 # main
@@ -118,6 +155,16 @@ $eventTypesValue = New-Object System.Collections.Generic.List[String]
 foreach ($node in $eventTypes)
 {
     $eventTypesValue.Add($node.InnerText)
+}
+
+$usedResources = $xmlDoc.DocumentElement.SelectSingleNode("//UsedResources")
+
+foreach ($node in $usedResources.ChildNodes)
+{
+	$guid = $node.Attributes["Id"].Value
+	$listName = $node.Attributes["Title"].Value
+
+	$xaml = PatchXaml $xaml $guid $listName
 }
 
 Write-Host "Got the content of the workflow definition file"
