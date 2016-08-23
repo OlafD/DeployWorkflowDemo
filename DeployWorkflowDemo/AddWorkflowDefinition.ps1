@@ -99,13 +99,40 @@ function PatchXaml()
 #
 #------------------------------------------------------------------------------
 
-[System.Reflection.Assembly]::LoadWithPartialName("Microsoft.SharePoint.Client.WorkflowServices.dll")
+# Load the Microsoft.SharePoint.Client.WorkflowServices.dll
+Write-Host "Loading Microsoft.SharePoint.Client.WorkflowServices.dll"
 
+$localAppData = Get-Item env:LOCALAPPDATA
+$localAppDataPath = $localAppData.Value
+$assemblyPath = $localAppDataPath + "\Apps\SharePointPnPPowerShellOnline\Modules\SharePointPnPPowerShellOnline\Microsoft.SharePoint.Client.WorkflowServices.dll"
+$loadedAssembly = $null
+
+Try
+{
+	$loadedAssembly = [System.Reflection.Assembly]::LoadFile($assemblyPath)
+}
+Catch
+{
+}
+
+if ($loadedAssembly -ne $null)
+{
+	Write-Host "Loading done."
+}
+else
+{
+	Write-Host -ForegroundColor Red "Cannot load Microsoft.SharePoint.Client.WorkflowServices.dll"
+
+	Return
+}
+
+# check and get credentials
 if ($Credential -eq $null)
 {
 	$Credential = Get-Credential
 }
 
+# connect to the web in SharePoint Online
 Connect-SPOnline -Url $Url -Credentials $Credential
 Write-Host "Connected to web site $Url"
 
