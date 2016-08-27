@@ -5,10 +5,6 @@ param (
 	[string]$WorkflowDefinitionFile,
 	[Parameter(Mandatory=$true)]
 	[string]$TargetList,
-	[Parameter(Mandatory=$true)]
-	[string]$TaskList,
-	[Parameter(Mandatory=$true)]
-	[string]$HistoryList,
 	$Credential
 )
 
@@ -17,46 +13,6 @@ param (
 # functions
 #
 #------------------------------------------------------------------------------
-
-function EnsureTaskList() 
-{
-	param (
-		[Parameter(Mandatory=$true)]
-		[string]$ListName
-	)
-
-	$list = Get-SPOList | Where { $_.Title -eq $ListName }
-
-	if ($list -eq $null)
-	{
-		$list = New-SPOList -Title $ListName -Template Tasks 
-
-		Add-SPOContentTypeToList -List $ListName -ContentType "0x0108003365C4474CAE8C42BCE396314E88E51F"
-
-		Write-Host -ForegroundColor Yellow "Tasklist $ListName created"
-	}
-
-	return $list
-}
-
-function EnsureWorkflowHistoryList() 
-{
-	param (
-		[Parameter(Mandatory=$true)]
-		[string]$ListName
-	)
-
-	$list = Get-SPOList | Where { $_.Title -eq $ListName }
-
-	if ($list -eq $null)
-	{
-		$list = New-SPOList -Title $ListName -Template WorkflowHistory
-
-		Write-Host -ForegroundColor Yellow "Workflow History list $ListName created"
-	}
-
-	return $list
-}
 
 #------------------------------------------------------------------------------
 #
@@ -144,8 +100,6 @@ foreach ($node in $eventTypes)
 Write-Host "Got the content of the workflow definition file"
 
 # get necessary objects
-$workflowTaskList = EnsureTaskList $TaskList
-$workflowHistoryList = EnsureWorkflowHistoryList $HistoryList
 $eventSourceList = Get-SPOList | Where { $_.Title -eq $TargetList }
 
 if ($eventSourceList -eq $null)

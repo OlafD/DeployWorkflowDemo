@@ -32,6 +32,8 @@ function EnsureTaskList()
 		Add-SPOContentTypeToList -List $ListName -ContentType "0x0108003365C4474CAE8C42BCE396314E88E51F"
 
 		Write-Host -ForegroundColor Yellow "Tasklist $ListName created"
+
+		$list = Get-SPOList | Where { $_.Title -eq $ListName }
 	}
 
 	return $list
@@ -51,6 +53,8 @@ function EnsureWorkflowHistoryList()
 		$list = New-SPOList -Title $ListName -Template WorkflowHistory
 
 		Write-Host -ForegroundColor Yellow "Workflow History list $ListName created"
+
+		$list = Get-SPOList | Where { $_.Title -eq $ListName }
 	}
 
 	return $list

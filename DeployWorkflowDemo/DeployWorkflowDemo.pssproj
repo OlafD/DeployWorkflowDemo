@@ -27,12 +27,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="UpdateWorkflow.ps1" />
+    <Compile Include="AddWorkflow.ps1" />
     <Compile Include="AddWorkflowDefinition.ps1" />
     <Compile Include="AddWorkflowSubscription.ps1" />
     <Compile Include="CreateStructure.ps1" />
     <Compile Include="GetWorkflowDefinition.ps1" />
     <Compile Include="SetWorkflowDefinition.ps1" />
     <Compile Include="SetWorkflowSubscription.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Copy to LibraryB.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />

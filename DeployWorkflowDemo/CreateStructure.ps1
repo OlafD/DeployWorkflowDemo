@@ -1,8 +1,14 @@
 param (
-    [string]$Url
+    [string]$Url,
+	$Cred
 )
 
-Connect-SPOnline -Url $Url
+if ($Cred -eq $null)
+{
+	$Cred = Get-Credential
+}
+
+Connect-SPOnline -Url $Url -Credentials $Cred
 
 Write-Host "Connected to $Url"
 

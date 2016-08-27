@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowDefinition>
+  <DisplayName>Copy to LibraryB</DisplayName>
+  <Description>
+  </Description>
+  <Xaml>
+    <Activity mc:Ignorable="mwaw" x:Class="Copy to LibraryB.MTW" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:local="clr-namespace:Microsoft.SharePoint.WorkflowServices.Activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mwaw="clr-namespace:Microsoft.Web.Authoring.Workflow;assembly=Microsoft.Web.Authoring" xmlns:p="http://schemas.microsoft.com/workflow/2012/07/xaml/activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+      <x:Members>
+        <x:Property Name="ValueforFieldC" Type="InArgument(x:String)" />
+      </x:Members>
+      <Sequence>
+        <Sequence>
+          <mwaw:SPDesignerXamlWriter.CustomAttributes>
+            <scg:Dictionary x:TypeArguments="x:String, x:String">
+              <x:String x:Key="InitBlock">InitBlock-7751C281-B0D1-4336-87B4-83F2198EDE6D</x:String>
+            </scg:Dictionary>
+          </mwaw:SPDesignerXamlWriter.CustomAttributes>
+        </Sequence>
+        <Flowchart StartNode="{x:Reference __ReferenceID2}">
+          <FlowStep x:Name="__ReferenceID2">
+            <mwaw:SPDesignerXamlWriter.CustomAttributes>
+              <scg:Dictionary x:TypeArguments="x:String, x:String" />
+            </mwaw:SPDesignerXamlWriter.CustomAttributes>
+            <Sequence>
+              <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                <scg:Dictionary x:TypeArguments="x:String, x:String">
+                  <x:String x:Key="StageAttribute">StageContainer-8EDBFE6D-DA0D-42F6-A806-F5807380DA4D</x:String>
+                </scg:Dictionary>
+              </mwaw:SPDesignerXamlWriter.CustomAttributes>
+              <local:SetWorkflowStatus Disabled="False" Status="Initiation">
+                <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                  <scg:Dictionary x:TypeArguments="x:String, x:String">
+                    <x:String x:Key="StageAttribute">StageHeader-7FE15537-DFDB-4198-ABFA-8AF8B9D669AE</x:String>
+                  </scg:Dictionary>
+                </mwaw:SPDesignerXamlWriter.CustomAttributes>
+              </local:SetWorkflowStatus>
+              <Sequence DisplayName="Initiation">
+                <local:WriteToHistory>
+                  <local:WriteToHistory.Message>
+                    <InArgument x:TypeArguments="x:String">
+                      <p:FormatString Format="The workflow was started with the following value from the initiation form:&#xD;&#xA;&#xD;&#xA;{0}">
+                        <p:FormatString.Arguments>
+                          <InArgument x:TypeArguments="x:String">
+                            <ArgumentValue x:TypeArguments="x:String" ArgumentName="ValueforFieldC" />
+                          </InArgument>
+                        </p:FormatString.Arguments>
+                      </p:FormatString>
+                    </InArgument>
+                  </local:WriteToHistory.Message>
+                </local:WriteToHistory>
+              </Sequence>
+              <Sequence>
+                <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                  <scg:Dictionary x:TypeArguments="x:String, x:String">
+                    <x:String x:Key="StageAttribute">StageFooter-3A59FA7C-C493-47A1-8F8B-1F481143EB08</x:String>
+                  </scg:Dictionary>
+                </mwaw:SPDesignerXamlWriter.CustomAttributes>
+              </Sequence>
+            </Sequence>
+            <FlowStep.Next>
+              <FlowStep x:Name="__ReferenceID0">
+                <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                  <scg:Dictionary x:TypeArguments="x:String, x:String" />
+                </mwaw:SPDesignerXamlWriter.CustomAttributes>
+                <Sequence>
+                  <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                    <scg:Dictionary x:TypeArguments="x:String, x:String">
+                      <x:String x:Key="StageAttribute">StageContainer-8EDBFE6D-DA0D-42F6-A806-F5807380DA4D</x:String>
+                    </scg:Dictionary>
+                  </mwaw:SPDesignerXamlWriter.CustomAttributes>
+                  <local:SetWorkflowStatus Disabled="False" Status="Copy the document">
+                    <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                      <scg:Dictionary x:TypeArguments="x:String, x:String">
+                        <x:String x:Key="StageAttribute">StageHeader-7FE15537-DFDB-4198-ABFA-8AF8B9D669AE</x:String>
+                      </scg:Dictionary>
+                    </mwaw:SPDesignerXamlWriter.CustomAttributes>
+                  </local:SetWorkflowStatus>
+                  <Sequence DisplayName="Copy the document">
+                    <local:CopyItem ItemId="{x:Null}" Overwrite="False" ToListId="5fd4313e-19ac-482b-beb2-933afcfb1eb6">
+                      <local:CopyItem.ItemGuid>
+                        <InArgument x:TypeArguments="s:Guid">
+                          <local:GetCurrentItemGuid Result="{x:Null}" />
+                        </InArgument>
+                      </local:CopyItem.ItemGuid>
+                      <local:CopyItem.ListId>
+                        <InArgument x:TypeArguments="s:Guid">
+                          <local:GetCurrentListId Result="{x:Null}" />
+                        </InArgument>
+                      </local:CopyItem.ListId>
+                    </local:CopyItem>
+                  </Sequence>
+                  <Sequence>
+                    <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                      <scg:Dictionary x:TypeArguments="x:String, x:String">
+                        <x:String x:Key="StageAttribute">StageFooter-3A59FA7C-C493-47A1-8F8B-1F481143EB08</x:String>
+                      </scg:Dictionary>
+                    </mwaw:SPDesignerXamlWriter.CustomAttributes>
+                  </Sequence>
+                </Sequence>
+                <FlowStep.Next>
+                  <FlowStep x:Name="__ReferenceID1">
+                    <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                      <scg:Dictionary x:TypeArguments="x:String, x:String">
+                        <x:String x:Key="Next">4294967294</x:String>
+                      </scg:Dictionary>
+                    </mwaw:SPDesignerXamlWriter.CustomAttributes>
+                    <Sequence>
+                      <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                        <scg:Dictionary x:TypeArguments="x:String, x:String">
+                          <x:String x:Key="StageAttribute">StageContainer-8EDBFE6D-DA0D-42F6-A806-F5807380DA4D</x:String>
+                        </scg:Dictionary>
+                      </mwaw:SPDesignerXamlWriter.CustomAttributes>
+                      <local:SetWorkflowStatus Disabled="False" Status="Set metadata in document">
+                        <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                          <scg:Dictionary x:TypeArguments="x:String, x:String">
+                            <x:String x:Key="StageAttribute">StageHeader-7FE15537-DFDB-4198-ABFA-8AF8B9D669AE</x:String>
+                          </scg:Dictionary>
+                        </mwaw:SPDesignerXamlWriter.CustomAttributes>
+                      </local:SetWorkflowStatus>
+                      <Sequence DisplayName="Set metadata in document">
+                        <local:UpdateListItem ItemId="{x:Null}" ListId="5fd4313e-19ac-482b-beb2-933afcfb1eb6" ListItemPropertiesDynamicValue="{x:Null}">
+                          <local:UpdateListItem.ItemGuid>
+                            <InArgument x:TypeArguments="s:Guid">
+                              <local:LookupSPListItemGuid ItemId="{x:Null}" ListId="5fd4313e-19ac-482b-beb2-933afcfb1eb6" PropertyName="FileLeafRef" Result="{x:Null}">
+                                <local:LookupSPListItemGuid.PropertyValue>
+                                  <InArgument x:TypeArguments="x:String">
+                                    <local:LookupSPListItemStringProperty ItemId="{x:Null}" PropertyName="FileLeafRef" Result="{x:Null}">
+                                      <local:LookupSPListItemStringProperty.ItemGuid>
+                                        <InArgument x:TypeArguments="s:Guid">
+                                          <local:GetCurrentItemGuid Result="{x:Null}" />
+                                        </InArgument>
+                                      </local:LookupSPListItemStringProperty.ItemGuid>
+                                      <local:LookupSPListItemStringProperty.ListId>
+                                        <InArgument x:TypeArguments="s:Guid">
+                                          <local:GetCurrentListId Result="{x:Null}" />
+                                        </InArgument>
+                                      </local:LookupSPListItemStringProperty.ListId>
+                                    </local:LookupSPListItemStringProperty>
+                                  </InArgument>
+                                </local:LookupSPListItemGuid.PropertyValue>
+                              </local:LookupSPListItemGuid>
+                            </InArgument>
+                          </local:UpdateListItem.ItemGuid>
+                          <local:UpdateListItem.ListItemProperties>
+                            <InArgument x:TypeArguments="scg:IDictionary(x:String, x:Object)">
+                              <p:BuildDictionary x:TypeArguments="x:String, x:Object" Dictionary="{x:Null}" Result="{x:Null}">
+                                <p:BuildDictionary.Values>
+                                  <InArgument x:TypeArguments="x:Object" x:Key="FieldA">
+                                    <Cast x:TypeArguments="x:String, x:Object">
+                                      <Cast.Operand>
+                                        <InArgument x:TypeArguments="x:String">
+                                          <local:LookupSPListItemStringProperty ItemId="{x:Null}" PropertyName="FieldA" Result="{x:Null}">
+                                            <local:LookupSPListItemStringProperty.ItemGuid>
+                                              <InArgument x:TypeArguments="s:Guid">
+                                                <local:GetCurrentItemGuid Result="{x:Null}" />
+                                              </InArgument>
+                                            </local:LookupSPListItemStringProperty.ItemGuid>
+                                            <local:LookupSPListItemStringProperty.ListId>
+                                              <InArgument x:TypeArguments="s:Guid">
+                                                <local:GetCurrentListId Result="{x:Null}" />
+                                              </InArgument>
+                                            </local:LookupSPListItemStringProperty.ListId>
+                                          </local:LookupSPListItemStringProperty>
+                                        </InArgument>
+                                      </Cast.Operand>
+                                      <Cast.Result>
+                                        <OutArgument x:TypeArguments="x:Object" />
+                                      </Cast.Result>
+                                    </Cast>
+                                  </InArgument>
+                                  <InArgument x:TypeArguments="x:Object" x:Key="FieldC">
+                                    <Cast x:TypeArguments="x:String, x:Object">
+                                      <Cast.Operand>
+                                        <InArgument x:TypeArguments="x:String">
+                                          <ArgumentValue x:TypeArguments="x:String" ArgumentName="ValueforFieldC">
+                                            <ArgumentValue.Result>
+                                              <OutArgument x:TypeArguments="x:String" />
+                                            </ArgumentValue.Result>
+                                          </ArgumentValue>
+                                        </InArgument>
+                                      </Cast.Operand>
+                                      <Cast.Result>
+                                        <OutArgument x:TypeArguments="x:Object" />
+                                      </Cast.Result>
+                                    </Cast>
+                                  </InArgument>
+                                </p:BuildDictionary.Values>
+                              </p:BuildDictionary>
+                            </InArgument>
+                          </local:UpdateListItem.ListItemProperties>
+                        </local:UpdateListItem>
+                      </Sequence>
+                      <Sequence>
+                        <mwaw:SPDesignerXamlWriter.CustomAttributes>
+                          <scg:Dictionary x:TypeArguments="x:String, x:String">
+                            <x:String x:Key="StageAttribute">StageFooter-3A59FA7C-C493-47A1-8F8B-1F481143EB08</x:String>
+                          </scg:Dictionary>
+                        </mwaw:SPDesignerXamlWriter.CustomAttributes>
+                      </Sequence>
+                    </Sequence>
+                  </FlowStep>
+                </FlowStep.Next>
+              </FlowStep>
+            </FlowStep.Next>
+          </FlowStep>
+          <x:Reference>__ReferenceID0</x:Reference>
+          <x:Reference>__ReferenceID1</x:Reference>
+        </Flowchart>
+      </Sequence>
+    </Activity>
+  </Xaml>
+  <FormField>
+    <Fields>
+      <Field Name="ValueforFieldC" FormType="Initiation" MaxLength="255" DisplayName="Value for FieldC" Description="" Direction="None" Type="Text" />
+    </Fields>
+</FormField>
+  <RequiresInitiationForm>True</RequiresInitiationForm>
+  <EventTypes>
+    <EventType>WorkflowStart</EventType>
+  </EventTypes>
+  <UsedResources>
+    <UsedResource Id="5fd4313e-19ac-482b-beb2-933afcfb1eb6" Title="LibraryB" />
+  </UsedResources>
+</WorkflowDefinition>
