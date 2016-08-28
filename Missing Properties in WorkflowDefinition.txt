@@ -1,0 +1,15 @@
+
+Missing Properties in WorkflowDefinition
+========================================
+
+AutosetStatusToStageName => true | false => true
+IsProjectMode => true | false => false
+isReusable => true | false => false
+RestrictToScope => guid of target list
+RestrictToType => List
+SPDConfig.LastEditMode => TextBased
+SPDConfig.StartManually => true | false
+SPDConfig.StartOnChange => true | false
+SPDConfig.StartOnCreate => true | false
+SubscriptionId => guid of the workflow subscription
+SubscriptionName => name of the definition

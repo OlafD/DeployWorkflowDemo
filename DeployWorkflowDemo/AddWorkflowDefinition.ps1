@@ -97,6 +97,45 @@ function PatchXaml()
 	return $result
 }
 
+function SetMetaInfoValue ()
+{
+	param (
+		[string]$MetaInfo,
+		[string]$Key,
+		[string]$Value
+	)
+
+    $mi_new = ""
+	$found = $false
+	$searchKey = $Key + ":"
+
+    $MetaInfo -split “`r`n” | ForEach-Object {
+        if ( $_.StartsWith($searchKey) -eq $true)
+        {
+            $mi_new = $mi_new + "`r`n" + $searchKey + $Value
+
+			$found = $true
+        }
+        else
+        {
+            $mi_new = $mi_new + "`r`n" + $_
+        }
+    }
+
+    if ($mi_new.StartsWith("`r`n") -eq $true)
+    {
+        $mi_new.TrimStart("`r") | Out-Null
+        $mi_new.TrimStart("`n") | Out-Null
+    }
+
+	if ($found -eq $false)
+	{
+        $mi_new = $mi_new + "`r`n" + $searchKey + $Value
+	}
+
+    return $mi_new
+}
+
 #------------------------------------------------------------------------------
 #
 # main
@@ -212,14 +251,107 @@ $wfDefinition.Description = $description
 $wfDefinition.Xaml = $xaml
 $wfDefinition.FormField = $formField
 $wfDefinition.RequiresInitiationForm = $requiresInitiationForm
-$wfDefinition.SetProperty(“TaskListId”, "{" + $workflowTaskList.Id.ToString() + "}")
-$wfDefinition.SetProperty(“HistoryListId”, "{" + $workflowHistoryList.Id.ToString() + "}")
+
+$wfDefinition.SetProperty("TaskListId", "{" + $workflowTaskList.Id.ToString() + "}")
+$wfDefinition.SetProperty("HistoryListId", "{" + $workflowHistoryList.Id.ToString() + "}")
+
+$wfDefinition.SetProperty("AutosetStatusToStageName", "true")
+$wfDefinition.SetProperty("IsProjectMode", "false")
+$wfDefinition.SetProperty("isReusable", "false")
+$wfDefinition.SetProperty("SPDConfig.LastEditMode", "TextBased")
+
+# WorkflowStart => SPDConfig.StartManually:SW|true
+if ($eventTypesValue.Contains("WorkflowStart") -eq $true)
+{
+	$wfDefinition.SetProperty("SPDConfig.StartManually", "true")
+}
+else
+{
+	$wfDefinition.SetProperty("SPDConfig.StartManually", "false")
+}
+
+# ItemAdded => SPDConfig.StartOnCreate:SW|false
+if ($eventTypesValue.Contains("ItemAdded") -eq $true)
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnCreate", "true")
+}
+else
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnCreate", "false")
+}
+
+# ItemUpdated => SPDConfig.StartOnChange:SW|false
+if ($eventTypesValue.Contains("ItemUpdated") -eq $true)
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnChange", "true")
+}
+else
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnChange", "false")
+}
 
 # Save and publish the Workflow Definition object
 $definitionId = $wfDeploymentService.SaveDefinition($wfDefinition)
 $ctx.Load($wfDefinition)
 $ctx.ExecuteQuery()
 Write-Host "Workflow Definition written to web"
+
+if ($false)
+{
+Start-Sleep 3
+
+# update the properties and MetaInfo
+$wfDefPnP = Get-SPOWorkflowDefinition -Name $displayName
+$wfDefinition = $wfDeploymentService.GetDefinition([Guid]$wfDefPnP.Id)
+
+$metaInfo = $wfDefinition.Properties["MetaInfo"]
+
+$metaInfo = SetMetaInfoValue $metaInfo "TaskListId" "{" + $workflowTaskList.Id.ToString() + "}"
+$metaInfo = SetMetaInfoValue $metaInfo "HistoryListId" "{" + $workflowHistoryList.Id.ToString() + "}"
+
+#$wfDefinition.SetProperty("MetaInfo", $metaInfo)
+
+$wfDefinition.SetProperty("AutosetStatusToStageName", "true")
+$wfDefinition.SetProperty("IsProjectMode", "false")
+$wfDefinition.SetProperty("isReusable", "false")
+$wfDefinition.SetProperty("SPDConfig.LastEditMode", "TextBased")
+
+# WorkflowStart => SPDConfig.StartManually:SW|true
+if ($eventTypesValue.Contains("WorkflowStart") -eq $true)
+{
+	$wfDefinition.SetProperty("SPDConfig.StartManually", "true")
+}
+else
+{
+	$wfDefinition.SetProperty("SPDConfig.StartManually", "false")
+}
+
+# ItemAdded => SPDConfig.StartOnCreate:SW|false
+if ($eventTypesValue.Contains("ItemAdded") -eq $true)
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnCreate", "true")
+}
+else
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnCreate", "false")
+}
+
+# ItemUpdated => SPDConfig.StartOnChange:SW|false
+if ($eventTypesValue.Contains("ItemUpdated") -eq $true)
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnChange", "true")
+}
+else
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnChange", "false")
+}
+
+
+$definitionId = $wfDeploymentService.SaveDefinition($wfDefinition)
+$ctx.Load($wfDefinition)
+$ctx.ExecuteQuery()
+Write-Host "Workflow Definition updated in web"
+}
 
 # Publish the Workflow Definition
 $wfDeploymentService.PublishDefinition($definitionId.Value)

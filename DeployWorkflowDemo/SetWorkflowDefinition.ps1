@@ -162,7 +162,8 @@ foreach ($node in $usedResources.ChildNodes)
 Write-Host "Got the content of the workflow definition file"
 
 $wfDefPnP = Get-SPOWorkflowDefinition -Name $displayName
-$wfDefinition = $wfDeploymentService.GetDefinition($wfDefPnP.Id)
+$definitionId = [Guid]$wfDefPnP.Id
+$wfDefinition = $wfDeploymentService.GetDefinition($definitionId)
 
 # Set new values in the Workflow Definition object
 $wfDefinition.Description = $description
@@ -170,6 +171,54 @@ $wfDefinition.Xaml = $xaml
 $wfDefinition.FormField = $formField
 $wfDefinition.RequiresInitiationForm = $requiresInitiationForm
 # we do not set task list or history list to new values
+
+$wfDefinition.SetProperty("AutosetStatusToStageName", "true")
+$wfDefinition.SetProperty("IsProjectMode", "false")
+$wfDefinition.SetProperty("isReusable", "false")
+$wfDefinition.SetProperty("SPDConfig.LastEditMode", "TextBased")
+
+# WorkflowStart => SPDConfig.StartManually:SW|true
+if ($eventTypesValue.Contains("WorkflowStart") -eq $true)
+{
+	$wfDefinition.SetProperty("SPDConfig.StartManually", "true")
+}
+else
+{
+	$wfDefinition.SetProperty("SPDConfig.StartManually", "false")
+}
+
+# ItemAdded => SPDConfig.StartOnCreate:SW|false
+if ($eventTypesValue.Contains("ItemAdded") -eq $true)
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnCreate", "true")
+}
+else
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnCreate", "false")
+}
+
+# ItemUpdated => SPDConfig.StartOnChange:SW|false
+if ($eventTypesValue.Contains("ItemUpdated") -eq $true)
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnChange", "true")
+}
+else
+{
+	$wfDefinition.SetProperty("SPDConfig.StartOnChange", "false")
+}
+
+$subscription = Get-SPOWorkflowSubscription -Name $displayName
+
+if ($subscription -ne $null)
+{
+	$wfDefinition.SetProperty("RestrictToScope", $subscription.EventSourceId)
+	$wfDefinition.SetProperty("RestrictToType", "List")
+
+	$wfDefinition.SetProperty("SubscriptionId", $subscription.Id)
+	$wfDefinition.SetProperty("SubscriptionName", $displayName)
+
+	Write-Host "Subscription information added to workflow definition"
+}
 
 # Save and publish the Workflow Definition object
 $definitionId = $wfDeploymentService.SaveDefinition($wfDefinition)

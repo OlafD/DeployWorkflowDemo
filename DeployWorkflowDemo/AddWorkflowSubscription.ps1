@@ -209,7 +209,7 @@ else
 	$wfSubscription.SetProperty("HistoryListId", "{" + $workflowHistoryList.Id.ToString() + "}")
 
 	# Publish the Workflow Subscription
-	$wfSubscriptionService.PublishSubscriptionForList($wfSubscription, $eventSourceList.Id)
+	$subscriptionId = $wfSubscriptionService.PublishSubscriptionForList($wfSubscription, $eventSourceList.Id)
 	$ctx.ExecuteQuery()
 	Write-Host "Workflow Subscription published"
 }
