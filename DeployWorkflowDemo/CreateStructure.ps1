@@ -1,5 +1,7 @@
 param (
+	[Parameter(Mandatory=$true)]
     [string]$Url,
+	[Parameter(Mandatory=$true)]
 	$Cred
 )
 

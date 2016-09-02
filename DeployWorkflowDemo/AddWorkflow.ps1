@@ -1,12 +1,17 @@
 param (
-	$Url,
+	[Parameter(Mandatory=$true)]
+	[string]$Url,
+	[Parameter(Mandatory=$true)]
 	$Cred
 )
 
-.\AddWorkflowDefinition.ps1 -Url $Url -WorkflowDefinitionFile "C:\Temp\Copy to LibraryB.xml" -TaskList "Workflow Tasks" -HistoryList "Workflow History" -Credential $Cred
+$currentPath = Split-Path -Parent $PSCommandPath
+$workflowDefinition = "$currentPath\Copy to LibraryB.xml"
 
-.\AddWorkflowSubscription.ps1 -Url $Url -WorkflowDefinitionFile "C:\Temp\Copy to LibraryB.xml" -TargetList "LibraryA" -TaskList "Workflow Tasks" -HistoryList "Workflow History" -Credential $Cred
+.\AddWorkflowDefinition.ps1 -Url $Url -WorkflowDefinitionFile $workflowDefinition -TaskList "Workflow Tasks" -HistoryList "Workflow History" -Credential $Cred
 
-.\SetWorkflowDefinition.ps1 -Url $Url -WorkflowDefinitionFile "C:\Temp\Copy to LibraryB.xml" -Credential $Cred
+.\AddWorkflowSubscription.ps1 -Url $Url -WorkflowDefinitionFile $workflowDefinition -TargetList "LibraryA" -TaskList "Workflow Tasks" -HistoryList "Workflow History" -Credential $Cred
 
-.\SetWorkflowSubscription.ps1 -Url $Url -WorkflowDefinitionFile "C:\Temp\Copy to LibraryB.xml" -TargetList "LibraryA" -Credential $Cred
+.\SetWorkflowDefinition.ps1 -Url $Url -WorkflowDefinitionFile $workflowDefinition -Credential $Cred
+
+.\SetWorkflowSubscription.ps1 -Url $Url -WorkflowDefinitionFile $workflowDefinition -TargetList "LibraryA" -Credential $Cred

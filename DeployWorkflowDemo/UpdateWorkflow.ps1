@@ -1,8 +1,13 @@
 param (
+	[Parameter(Mandatory=$true)]
 	$Url,
+	[Parameter(Mandatory=$true)]
 	$Cred
 )
 
-.\SetWorkflowDefinition -Url $Url -WorkflowDefinitionFile "C:\Temp\Copy to LibraryB.xml" -Credential $Cred
+$currentPath = Split-Path -Parent $PSCommandPath
+$workflowDefinition = "$currentPath\Copy to LibraryB.xml"
 
-.\SetWorkflowSubscription -Url $Url -WorkflowDefinitionFile "C:\Temp\Copy to LibraryB.xml" -TargetList "LibraryA" -Credential $Cred
+.\SetWorkflowDefinition -Url $Url -WorkflowDefinitionFile $workflowDefinition -Credential $Cred
+
+.\SetWorkflowSubscription -Url $Url -WorkflowDefinitionFile $workflowDefinition -TargetList "LibraryA" -Credential $Cred
